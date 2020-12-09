@@ -21,15 +21,15 @@ function toggle() {
   }
 }
 function tick() {
-  const fn = () => {
-    console.log('tick')
-    b.cycle()
-    renderBoard(b)
-  }
-  fn()
+  const fn = () => renderBoard(b)
+  fn() // call once then start ticking
   int = setInterval(fn, tickRate);
 }
+// this example cycles bulk: https://medium.com/better-programming/how-to-write-conwells-game-of-life-in-python-c6eca19c4676
 function renderBoard(board) {
+  // console.log('tick')
+  // board.cycleOneByOne()
+  board.cycleBulk()
   for(const r of board.rows)
   for(const c of r) {
     const el = cellElements[c.coord]
