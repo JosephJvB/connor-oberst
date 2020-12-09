@@ -1,45 +1,47 @@
 class Board {
   cellCount = 0
   aliveCount = 0
-  cells = {}
+  rows = []
   constructor(cellCount, aliveCount) {
     this.cellCount = cellCount
     this.aliveCount = aliveCount
     const alive = this.generateAliveCells()
     for(let r = 0; r < this.cellCount; r++) {
+      const row = []
       for(let c = 0; c < this.cellCount; c++) {
         const coord = `${r}-${c}`
-        const live = alive.includes(coord)
-        this.cells[coord] = new Cell(r, c, live)
+        const live = alive[coord]
+        row.push(new Cell(r, c, live))
       }
+      this.rows.push(row)
     }
   }
 
-  draw() {
-    const list = this.cellList
-    const aliveCoords = list.filter(c => c.alive).map(c => c.coord)
-    for(const c of list) {
-      const ref = this.cells[c.coord]
-      const aliveNeighbours = ref.neighbours.filter(n => aliveCoords.includes(n)).length
-      if(aliveNeighbours < 2 || aliveNeighbours > 3) ref.alive = false
-      else if(!ref.alive && aliveNeighbours == 3) ref.alive = true
+  cycle() {
+    const aliveCoords = {}
+    for(const r of this.rows)
+    for(const c of r) {
+      aliveCoords[c.coord] = c.alive
     }
-  }
-
-  get cellList() {
-    return Object.keys(this.cells).map(k => this.cells[k])
+    for(const r of this.rows)
+    for(const c of r) {
+      const aliveNeighbours = c.neighbours.filter(n => aliveCoords[n]).length
+      if(aliveNeighbours < 2 || aliveNeighbours > 3) c.alive = false
+      else if(!c.alive && aliveNeighbours == 3) c.alive = true
+    }
   }
   generateAliveCells() {
-    const list = []
     const getCoord = () => {
       const r = Math.floor(Math.random() * this.cellCount)
       const c = Math.floor(Math.random() * this.cellCount)
       return `${r}-${c}`
     }
-    while(list.length < this.aliveCount) {
+    let count = 0
+    const map = {}
+    while(count < this.aliveCount) {
       let i = 0
       let c = getCoord()
-      while(list.includes(c)) {
+      while(map[c]) { // if already in map, reroll
         if(i > this.aliveCount * 10) {
           const e = `Failed to generate random live cells, exiting`
           alert(e)
@@ -48,9 +50,11 @@ class Board {
         c = getCoord()
         i++
       }
+      // add to map
       i = 0
-      list.push(c)
+      count++
+      map[c] = true
     }
-    return list
+    return map
   }
 }
