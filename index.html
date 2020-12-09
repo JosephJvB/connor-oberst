@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    header {
+      text-align: center;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      width: 200px;
+      height: 200px;
+      border: 1px solid black;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+    footer {
+      display: flex;
+    }
+    button {
+      margin: 0 auto;
+      margin-top: 10px;
+    }
+    .alive {
+      background: black;
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Conway the Machine</h1>
+  </header>
+  <main>
+  </main>
+  <footer>
+    <button onclick="toggle()">
+      start
+    </button>
+  </footer>
+  <script src="models/Cell.js"></script>
+  <script src="models/Board.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
