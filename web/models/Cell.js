@@ -9,7 +9,7 @@ class Cell {
     this.c = c
     this.alive = !!alive
     this.coord = this.getCoord
-    this.neigbours = this.getNeighbours
+    this.neighbours = this.getNeighbours
   }
   // only use these once in constructor to avoid repeated function calls (Seems like the right thing to do?)
   get getCoord() {
