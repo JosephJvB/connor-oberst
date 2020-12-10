@@ -1,6 +1,6 @@
 const m = document.querySelector('main')
 const button = document.querySelector('button')
-let cellCount = 30
+let cellCount = 50
 let aliveCount = 300
 let tickRate = 1000 * 0.5
 let int = null
@@ -17,13 +17,9 @@ function toggle() {
   } else {
     console.log('start')
     button.textContent = 'stop'
-    tick()
+    renderBoard(b) // call once then start ticking
+    int = setInterval(() => renderBoard(b), tickRate)
   }
-}
-function tick() {
-  const fn = () => renderBoard(b)
-  fn() // call once then start ticking
-  int = setInterval(fn, tickRate);
 }
 // this example cycles bulk: https://medium.com/better-programming/how-to-write-conwells-game-of-life-in-python-c6eca19c4676
 function renderBoard(board) {
