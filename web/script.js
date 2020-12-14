@@ -25,15 +25,14 @@ function toggle() {
 function renderBoard(board) {
   // console.log('tick')
   // board.cycleOneByOne()
-  board.cycleBulk()
+  const updates = board.getCycleBulk() // { 'row-cell': { alive: bool }, ... }
   for(const r of board.rows)
   for(const c of r) {
+    if(!updates[c.coord]) continue
+    c.alive = updates[c.coord].alive
     const el = cellElements[c.coord]
-    const domAlive = el.classList.contains('alive')
-    if(domAlive != c.alive) {
-      const method = domAlive ? 'remove' : 'add'
-      el.classList[method]('alive')
-    }
+    const method = c.alive ? 'add' : 'remove'
+    el.classList[method]('alive')
   }
 }
 function initDOM(board) {
