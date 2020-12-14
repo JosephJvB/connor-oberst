@@ -17,7 +17,7 @@ class Board {
       this.rows.push(row)
     }
   }
-  cycleBulk() { // calculate updates -> then apply them
+  getCycleBulk() { // calculate updates -> then apply them
     const aliveCoords = {}
     for(const r of this.rows)
     for(const c of r) {
@@ -30,10 +30,7 @@ class Board {
       if(aliveNeighbours < 2 || aliveNeighbours > 3) updates[c.coord] = { alive: false }
       else if(!c.alive && aliveNeighbours == 3) updates[c.coord] = { alive: true } // heros never die!!
     }
-    for(const r of this.rows)
-    for(const c of r) {
-      if(updates[c.coord]) c.alive = updates[c.coord].alive
-    }
+    return updates
   }
   cycleOneByOne() { // calculate & apply updates one by one. Previous update will affect the next calculation
     const aliveCoords = {}
