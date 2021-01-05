@@ -7,20 +7,21 @@ let int = null
 let b = new Board(cellCount, aliveCount)
 let cellElements = {}
 initDOM(b)
-
-function toggle() {
-  if(int) {
-    console.log('stop')
-    button.textContent = 'start'
-    clearInterval(int)
-    int = null
-  } else {
-    console.log('start')
-    button.textContent = 'stop'
-    renderBoard(b) // call once then start ticking
-    int = setInterval(() => renderBoard(b), tickRate)
-  }
-}
+renderBoard(b) // call once then start ticking
+setInterval(() => renderBoard(b), tickRate)
+// function toggle() {
+//   if(int) {
+//     console.log('stop')
+//     button.textContent = 'start'
+//     clearInterval(int)
+//     int = null
+//   } else {
+//     console.log('start')
+//     button.textContent = 'stop'
+//     renderBoard(b) // call once then start ticking
+//     int = setInterval(() => renderBoard(b), tickRate)
+//   }
+// }
 // this example cycles bulk: https://medium.com/better-programming/how-to-write-conwells-game-of-life-in-python-c6eca19c4676
 function renderBoard(board) {
   // console.log('tick')
