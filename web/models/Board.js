@@ -23,6 +23,7 @@ class Board {
         c.alive = c.nextAlive
         const method = c.alive ? 'add' : 'remove'
         c.el.classList[method]('alive')
+        delete c.nextAlive
       }
     }, 0.5 * 1000);
   }

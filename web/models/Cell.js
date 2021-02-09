@@ -4,7 +4,6 @@ class Cell {
   c = 0
   alive = false
   neighbours = []
-  nextAlive = null
   constructor(r, c) {
     this.el.className = 'cell'
     this.r = r
