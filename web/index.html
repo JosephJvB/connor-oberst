@@ -43,12 +43,27 @@
   <main>
   </main>
   <footer>
-    <!-- <button onclick="toggle()">
-      start
-    </button> -->
   </footer>
+  <script type="text/javascript">
+    const CELL_COUNT = 50
+    const m = document.querySelector('main')
+    const s = document.createElement('style')
+    const text = [
+      `.cell {`,
+      `width: ${Number(m.clientWidth) / CELL_COUNT}px;`,
+      `height: ${Number(m.clientHeight) / CELL_COUNT}px;`,
+      `}`
+    ].join('\n')
+    const t = document.createTextNode(text)
+    s.appendChild(t)
+    document.head.appendChild(s)
+  </script>
   <script src="models/Cell.js"></script>
+  <script src="models/Row.js"></script>
   <script src="models/Board.js"></script>
-  <script src="script.js"></script>
+  <script type="text/javascript">
+    const b = new Board()
+    b.start()
+  </script>
 </body>
 </html>

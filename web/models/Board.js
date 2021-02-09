@@ -1,74 +1,52 @@
 class Board {
-  cellCount = 0
-  aliveCount = 0
+  el = document.querySelector('main')
   rows = []
-  constructor(cellCount, aliveCount) {
-    this.cellCount = cellCount
-    this.aliveCount = aliveCount
-    const alive = this.generateAliveCells()
-    for(let r = 0; r < this.cellCount; r++) {
-      const row = []
-      for(let c = 0; c < this.cellCount; c++) {
-        const coord = `${r}-${c}`
-        const live = alive[coord]
-        row.push(new Cell(r, c, live))
-      }
-      this.rows.push(row)
+  tick = null
+  constructor() {
+    for(let i = 0; i < CELL_COUNT; i++) {
+      const r = new Row(i)
+      this.rows.push(r)
+      this.el.appendChild(r.el)
     }
   }
+  stop() {
+    clearInterval(this.tick)
+    this.tick = null
+  }
+  clear() {
+    this.rows = []
+  }
+  start() {
+    this.tick = setInterval(() => {
+      const updates = this.getCycleBulk()
+      for(const c of updates) {
+        c.alive = c.nextAlive
+        const method = c.alive ? 'add' : 'remove'
+        c.el.classList[method]('alive')
+      }
+    }, 0.5 * 1000);
+  }
   getCycleBulk() { // calculate updates -> then apply them
-    const aliveCoords = {}
+    const updates = [] // [Cell, Cell]
     for(const r of this.rows)
-    for(const c of r) {
-      aliveCoords[c.coord] = c.alive
-    }
-    const updates = {}
-    for(const r of this.rows)
-    for(const c of r) {
-      const aliveNeighbours = c.neighbours.filter(n => aliveCoords[n]).length
-      if(aliveNeighbours < 2 || aliveNeighbours > 3) updates[c.coord] = { alive: false }
-      else if(!c.alive && aliveNeighbours == 3) updates[c.coord] = { alive: true } // heros never die!!
+    for(const c of r.cells) {
+      const aliveNeighbours = this.countAliveNeighbours(c)
+      if(aliveNeighbours < 2 || aliveNeighbours > 3) {
+        c.nextAlive = false
+        updates.push(c)
+      } else if(!c.alive && aliveNeighbours == 3) {
+        c.nextAlive = true
+        updates.push(c) // heros never die!!
+      }
     }
     return updates
   }
-  cycleOneByOne() { // calculate & apply updates one by one. Previous update will affect the next calculation
-    const aliveCoords = {}
-    for(const r of this.rows)
-    for(const c of r) {
-      aliveCoords[c.coord] = c.alive
-    }
-    for(const r of this.rows)
-    for(const c of r) {
-      const aliveNeighbours = c.neighbours.filter(n => aliveCoords[n]).length
-      if(aliveNeighbours < 2 || aliveNeighbours > 3) c.alive = false
-      else if(!c.alive && aliveNeighbours == 3) c.alive = true
-    }
-  }
-  generateAliveCells() {
-    const getCoord = () => {
-      const r = Math.floor(Math.random() * this.cellCount)
-      const c = Math.floor(Math.random() * this.cellCount)
-      return `${r}-${c}`
-    }
+  countAliveNeighbours(c) {
     let count = 0
-    const map = {}
-    while(count < this.aliveCount) {
-      let i = 0
-      let c = getCoord()
-      while(map[c]) { // if already in map, reroll
-        if(i > this.aliveCount * 10) {
-          const e = `Failed to generate random live cells, exiting`
-          alert(e)
-          throw e
-        }
-        c = getCoord()
-        i++
-      }
-      // add to map
-      i = 0
-      count++
-      map[c] = true
+    for(const n of c.neighbours) {
+      const found = this.rows[n.r] && this.rows[n.r].cells[n.c]
+      if(found && found.alive) count++
     }
-    return map
+    return count
   }
 }
