@@ -18,7 +18,7 @@ class Board {
   }
   start() {
     this.tick = setInterval(() => {
-      const updates = this.getCycleBulk()
+      const updates = this.nextLifecycle
       for(const c of updates) {
         c.alive = c.nextAlive
         const method = c.alive ? 'add' : 'remove'
@@ -27,17 +27,17 @@ class Board {
       }
     }, 0.5 * 1000);
   }
-  getCycleBulk() { // calculate updates -> then apply them
+  get nextLifecycle() { // calculate updates -> then apply them
     const updates = [] // [Cell, Cell]
     for(const r of this.rows)
     for(const c of r.cells) {
       const aliveNeighbours = this.countAliveNeighbours(c)
-      if(aliveNeighbours < 2 || aliveNeighbours > 3) {
+      if(c.alive && (aliveNeighbours < 2 || aliveNeighbours > 3)) {
         c.nextAlive = false
         updates.push(c)
       } else if(!c.alive && aliveNeighbours == 3) {
-        c.nextAlive = true
-        updates.push(c) // heros never die!!
+        c.nextAlive = true // heros never die!!
+        updates.push(c)
       }
     }
     return updates
